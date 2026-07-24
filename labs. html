@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laboratory Management</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark bg-primary">
+<div class="container-fluid">
+<span class="navbar-brand">Laboratory Management</span>
+<a href="/dashboard" class="btn btn-light">Dashboard</a>
+</div>
+</nav>
+
+<div class="container mt-4">
+
+<div class="card shadow">
+
+<div class="card-header">
+<h4>Add Laboratory</h4>
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-6">
+<input id="lab_name" class="form-control" placeholder="Lab Name">
+</div>
+
+<div class="col-md-6">
+<input id="capacity" type="number" class="form-control" placeholder="Capacity">
+</div>
+
+</div>
+
+<br>
+
+<button onclick="saveLab()" class="btn btn-success">
+Save Laboratory
+</button>
+
+</div>
+
+</div>
+
+<br>
+
+<div class="card shadow">
+
+<div class="card-header">
+<h4>Laboratory List</h4>
+</div>
+
+<div class="card-body">
+
+<table class="table table-bordered">
+
+<thead class="table-primary">
+
+<tr>
+<th>ID</th>
+<th>Lab Name</th>
+<th>Capacity</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="labTable">
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="/static/labs.js"></script>
+
+</body>
+</html>
