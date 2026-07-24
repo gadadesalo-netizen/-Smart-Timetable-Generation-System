@@ -1,0 +1,45 @@
+const API="/api";
+
+// Login
+async function login(){
+
+    const username=document.getElementById("username").value;
+    const password=document.getElementById("password").value;
+
+    const response=await fetch(API+"/login",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            username:username,
+            password:password
+        })
+    });
+
+    if(response.ok){
+        window.location="/dashboard";
+    }else{
+        alert("Invalid Username or Password");
+    }
+}
+
+
+// Dashboard
+async function loadDashboard(){
+
+    const response=await fetch(API+"/dashboard");
+
+    const data=await response.json();
+
+    document.getElementById("facultyCount").innerHTML=data.faculty;
+    document.getElementById("subjectCount").innerHTML=data.subjects;
+    document.getElementById("divisionCount").innerHTML=data.divisions;
+    document.getElementById("roomCount").innerHTML=data.classrooms;
+    document.getElementById("labCount").innerHTML=data.laboratories;
+    document.getElementById("ttCount").innerHTML=data.timetable_entries;
+}
+
+if(window.location.pathname=="/dashboard"){
+    loadDashboard();
+}
