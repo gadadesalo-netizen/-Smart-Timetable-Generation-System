@@ -1,0 +1,84 @@
+const DIVISION_API = "/api/divisions";
+
+// Load divisions when page opens
+window.onload = function () {
+    loadDivisions();
+};
+
+// ----------------------------
+// Load Divisions
+// ----------------------------
+async function loadDivisions() {
+
+    const response = await fetch(DIVISION_API);
+    const data = await response.json();
+
+    let html = "";
+
+    data.forEach(d => {
+
+        html += `
+        <tr>
+            <td>${d.id}</td>
+            <td>${d.academic_year}</td>
+            <td>${d.name}</td>
+            <td>${d.students}</td>
+        </tr>
+        `;
+
+    });
+
+    document.getElementById("divisionTable").innerHTML = html;
+}
+
+// ----------------------------
+// Save Division
+// ----------------------------
+async function saveDivision() {
+
+    const division = {
+
+        academic_year: document.getElementById("academic_year").value,
+        name: document.getElementById("division_name").value,
+        students: Number(document.getElementById("students").value)
+
+    };
+
+    const response = await fetch(DIVISION_API, {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(division)
+
+    });
+
+    if (response.ok) {
+
+        alert("Division Added Successfully");
+
+        clearForm();
+
+        loadDivisions();
+
+    } else {
+
+        alert("Unable to Save Division");
+
+    }
+
+}
+
+// ----------------------------
+// Clear Form
+// ----------------------------
+function clearForm() {
+
+    document.getElementById("academic_year").value = "";
+    document.getElementById("division_name").value = "";
+    document.getElementById("students").value = "";
+
+}
