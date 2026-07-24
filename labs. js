@@ -1,0 +1,105 @@
+const LAB_API = "/api/laboratories";
+
+// Load laboratories
+window.onload = function () {
+    loadLabs();
+};
+
+// ----------------------------
+// Load Laboratories
+// ----------------------------
+async function loadLabs() {
+
+    const response = await fetch(LAB_API);
+    const data = await response.json();
+
+    let html = "";
+
+    data.forEach(lab => {
+
+        html += `
+        <tr>
+            <td>${lab.id}</td>
+            <td>${lab.lab_name}</td>
+            <td>${lab.capacity}</td>
+            <td>
+                <button class="btn btn-danger btn-sm"
+                    onclick="deleteLab(${lab.id})">
+                    Delete
+                </button>
+            </td>
+        </tr>
+        `;
+
+    });
+
+    document.getElementById("labTable").innerHTML = html;
+}
+
+// ----------------------------
+// Save Laboratory
+// ----------------------------
+async function saveLab() {
+
+    const lab = {
+
+        lab_name: document.getElementById("lab_name").value,
+        capacity: Number(document.getElementById("capacity").value)
+
+    };
+
+    const response = await fetch(LAB_API, {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(lab)
+
+    });
+
+    if (response.ok) {
+
+        alert("Laboratory Added Successfully");
+
+        clearForm();
+
+        loadLabs();
+
+    } else {
+
+        alert("Unable to Save Laboratory");
+
+    }
+
+}
+
+// ----------------------------
+// Delete Laboratory
+// ----------------------------
+async function deleteLab(id) {
+
+    if (!confirm("Delete this laboratory?"))
+        return;
+
+    await fetch(LAB_API + "/" + id, {
+
+        method: "DELETE"
+
+    });
+
+    loadLabs();
+
+}
+
+// ----------------------------
+// Clear Form
+// ----------------------------
+function clearForm() {
+
+    document.getElementById("lab_name").value = "";
+    document.getElementById("capacity").value = "";
+
+}
