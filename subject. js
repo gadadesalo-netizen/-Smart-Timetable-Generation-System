@@ -1,0 +1,95 @@
+const SUBJECT_API = "/api/subjects";
+
+// Load subjects when page opens
+window.onload = function () {
+    loadSubjects();
+};
+
+// -----------------------------
+// Load Subjects
+// -----------------------------
+async function loadSubjects() {
+
+    const response = await fetch(SUBJECT_API);
+    const data = await response.json();
+
+    let html = "";
+
+    data.forEach(s => {
+
+        html += `
+        <tr>
+            <td>${s.id}</td>
+            <td>${s.subject_code}</td>
+            <td>${s.name}</td>
+            <td>${s.academic_year}</td>
+            <td>${s.division}</td>
+            <td>${s.faculty}</td>
+            <td>${s.subject_type}</td>
+            <td>${s.weekly_limit}</td>
+        </tr>
+        `;
+
+    });
+
+    document.getElementById("subjectTable").innerHTML = html;
+}
+
+// -----------------------------
+// Save Subject
+// -----------------------------
+async function saveSubject() {
+
+    const subject = {
+
+        subject_code: document.getElementById("subject_code").value,
+        name: document.getElementById("subject_name").value,
+        academic_year: document.getElementById("academic_year").value,
+        division: document.getElementById("division").value,
+        faculty: document.getElementById("faculty").value,
+        subject_type: document.getElementById("subject_type").value,
+        weekly_limit: Number(document.getElementById("weekly_limit").value)
+
+    };
+
+    const response = await fetch(SUBJECT_API, {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(subject)
+
+    });
+
+    if (response.ok) {
+
+        alert("Subject Added Successfully");
+
+        clearForm();
+
+        loadSubjects();
+
+    } else {
+
+        alert("Unable to Save Subject");
+
+    }
+}
+
+// -----------------------------
+// Clear Form
+// -----------------------------
+function clearForm() {
+
+    document.getElementById("subject_code").value = "";
+    document.getElementById("subject_name").value = "";
+    document.getElementById("academic_year").value = "";
+    document.getElementById("division").value = "";
+    document.getElementById("faculty").value = "";
+    document.getElementById("subject_type").value = "Theory";
+    document.getElementById("weekly_limit").value = "";
+
+}
