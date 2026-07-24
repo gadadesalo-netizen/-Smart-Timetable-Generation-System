@@ -1,0 +1,117 @@
+const API = "/api";
+
+// Load faculty when page opens
+window.onload = function () {
+    loadFaculty();
+};
+
+// -----------------------------
+// Load Faculty
+// -----------------------------
+async function loadFaculty() {
+
+    const response = await fetch(API + "/faculty");
+    const data = await response.json();
+
+    let html = "";
+
+    data.forEach(f => {
+
+        html += `
+        <tr>
+            <td>${f.id}</td>
+            <td>${f.name}</td>
+            <td>${f.department}</td>
+            <td>${f.email}</td>
+            <td>${f.phone}</td>
+            <td>${f.designation}</td>
+            <td>${f.max_workload}</td>
+            <td>
+                <button class="btn btn-danger btn-sm"
+                    onclick="deleteFaculty(${f.id})">
+                    Delete
+                </button>
+            </td>
+        </tr>
+        `;
+
+    });
+
+    document.getElementById("facultyTable").innerHTML = html;
+}
+
+// -----------------------------
+// Save Faculty
+// -----------------------------
+async function saveFaculty() {
+
+    const faculty = {
+
+        name: document.getElementById("name").value,
+        department: document.getElementById("department").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        designation: document.getElementById("designation").value,
+        max_workload: Number(document.getElementById("workload").value)
+
+    };
+
+    const response = await fetch(API + "/faculty", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(faculty)
+
+    });
+
+    if (response.ok) {
+
+        alert("Faculty Added Successfully");
+
+        clearForm();
+
+        loadFaculty();
+
+    } else {
+
+        alert("Unable to Save Faculty");
+
+    }
+
+}
+
+// -----------------------------
+// Delete Faculty
+// -----------------------------
+async function deleteFaculty(id) {
+
+    if (!confirm("Delete this faculty?"))
+        return;
+
+    await fetch(API + "/faculty/" + id, {
+
+        method: "DELETE"
+
+    });
+
+    loadFaculty();
+
+}
+
+// -----------------------------
+// Clear Form
+// -----------------------------
+function clearForm() {
+
+    document.getElementById("name").value = "";
+    document.getElementById("department").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("phone").value = "";
+    document.getElementById("designation").value = "";
+    document.getElementById("workload").value = "";
+
+}
